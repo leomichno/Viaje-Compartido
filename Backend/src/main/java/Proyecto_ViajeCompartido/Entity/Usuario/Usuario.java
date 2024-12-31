@@ -19,6 +19,16 @@ public abstract class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
 
+    private String nombre;
+
+    private double saldo;
+
+    @ManyToMany(mappedBy = "usuarios")
+    private List<Viaje> viajes = new ArrayList<>();
+
+    @Column(name = "tipo_usuario", insertable = false, updatable = false)
+    private String tipoUsuario;
+
 
     public Usuario() {
     }
@@ -28,21 +38,6 @@ public abstract class Usuario {
         this.saldo=saldo;
         this.tipoUsuario=tipoUsuario;
     }
-
-
-    private String nombre;
-
-
-    private double saldo;
-
-    @ManyToMany(mappedBy = "usuarios")
-    private List<Viaje> viajes = new ArrayList<>();
-
-
-    @Column(name = "tipo_usuario", insertable = false, updatable = false)
-    private String tipoUsuario;
-
-
 
     public String getTipoDeUsuario() {
         return tipoUsuario;

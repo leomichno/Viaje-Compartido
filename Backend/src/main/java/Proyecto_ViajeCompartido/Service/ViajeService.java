@@ -4,8 +4,6 @@ package Proyecto_ViajeCompartido.Service;
 import Proyecto_ViajeCompartido.DTO.ViajeDTO;
 import Proyecto_ViajeCompartido.Entity.Usuario.Conductor;
 import Proyecto_ViajeCompartido.Entity.Viaje;
-import Proyecto_ViajeCompartido.Repository.ConductorRepository;
-import Proyecto_ViajeCompartido.Repository.VehiculoRepository;
 import Proyecto_ViajeCompartido.Repository.ViajeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,32 +11,32 @@ import org.springframework.stereotype.Service;
 @Service
 public class ViajeService {
 
-    @Autowired
     private ViajeRepository viajeRepository;
+    private ConductorService conductorService;
+
     @Autowired
-    private ConductorRepository conductorRepository;
+    public ViajeService(ViajeRepository viajeRepository,ConductorService conductorService){
+        this.viajeRepository=viajeRepository;
+        this.conductorService=conductorService;
+    }
+
+    public Viaje buscarViaje(Long id){
+        return viajeRepository.findById(id).orElseThrow(()->new RuntimeException("Viaje no encontrado"));
+    }
 
 
     public Viaje crearViaje(ViajeDTO dto){
-        System.out.println(dto.getId());
-        Conductor usuario = conductorRepository.findById(dto.getId())
-                .orElseThrow(()-> new RuntimeException("CONDUCTOR no encontrado"));
-        System.out.println(usuario.getTipoDeUsuario());
+        Conductor usuario=conductorService.getConductor(dto.getId());
         Viaje viaje = new Viaje(dto.getOrigen(), dto.getDestino(), dto.getCostoTotal(), dto.getFechaDeViaje());
-        System.out.println(viaje);
-        System.out.println(viaje.getFechaDeViaje());
-        if((usuario.getTipoDeUsuario().equals("CONDUCTOR"))&&(usuario.buscarViaje(viaje.getFechaDeViaje()))){
+        if((usuario.getTipoDeUsuario().equals("CONDUCTOR"))&&(usuario.tieneViajeEnFecha(viaje.getFechaDeViaje()))){
             usuario.crearViaje(viaje);
-            viaje.ocupantes().add(usuario);
-            viaje.setCapacidadTotal(usuario.getVehiculo().getCapacidadDePasajeros()-1);
+            viaje.setCapacidadTotal(usuario.getVehiculo().getCapacidadDePasajeros());
+            viaje.agregarPersona(usuario);
             return viajeRepository.save(viaje);
         }
 
         throw new RuntimeException("El usuario deber ser conductor para crear un viaje");
     }
-
-
-
 
 
 }

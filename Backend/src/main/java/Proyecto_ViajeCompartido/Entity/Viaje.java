@@ -13,7 +13,7 @@ public class Viaje {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(
             name = "viaje_usuarios",
             joinColumns = @JoinColumn(name = "viaje_id"),
@@ -21,38 +21,49 @@ public class Viaje {
     )
     private List<Usuario> usuarios = new ArrayList<>();
 
-    @Column(nullable = false)
+
     private String origen;
 
-    @Column(nullable = false)
+
     private String destino;
 
-    @Column(nullable = false)
+
     private double costoTotal;
 
-    @Column(nullable = false)
+
     private LocalDate fechaDeViaje;
 
-    private Integer capacidadTotal;
+    private Integer capacidadDisponible;
+
+    public Viaje(){}
 
     public Viaje(String origen,String destino,double costoTotal,LocalDate fechaDeViaje){
         this.origen=origen;
         this.destino=destino;
         this.costoTotal=costoTotal;
         this.fechaDeViaje=fechaDeViaje;
-        capacidadTotal=0;
+        capacidadDisponible=0;
     }
 
 
-    public List<Usuario> ocupantes(){
-        return usuarios;
+    public void agregarPersona(Usuario usuario){
+        usuarios.add(usuario);
+        capacidadDisponible--;
     }
 
     public void setCapacidadTotal(Integer capacidad){
-        capacidadTotal=capacidad;
+        capacidadDisponible=capacidad;
     }
 
     public LocalDate getFechaDeViaje(){
         return fechaDeViaje;
+    }
+
+    public Integer getCapacidadDisponible(){
+        return capacidadDisponible;
+    }
+
+    public List<Usuario> getUsuarios(){
+        return usuarios;
     }
 }

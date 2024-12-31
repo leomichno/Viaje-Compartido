@@ -10,8 +10,13 @@ import java.util.List;
 
 @Service
 public class ConductorService {
-    @Autowired
+
     private ConductorRepository conductorRepository;
+
+    @Autowired
+    public ConductorService(ConductorRepository conductorRepository){
+        this.conductorRepository=conductorRepository;
+    }
 
     public Conductor crearConductor(Conductor conductor){
         return conductorRepository.save(conductor);
@@ -20,4 +25,11 @@ public class ConductorService {
     public List<Conductor> getConductores(){
         return conductorRepository.findAll();
     }
+
+    public Conductor getConductor(Long id){
+        return conductorRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("CONDUCTOR no encontrado"));
+    }
+
+
 }

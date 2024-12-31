@@ -35,7 +35,7 @@ public class Conductor extends Usuario{
         this.agregarViaje(viaje);
     }
 
-    public boolean buscarViaje(LocalDate fechaDeViaje){
+    public boolean tieneViajeEnFecha(LocalDate fechaDeViaje){
         return this.getViajes().stream().noneMatch(viaje -> viaje.getFechaDeViaje().isEqual(fechaDeViaje));
     }
 
