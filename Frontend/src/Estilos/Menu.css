@@ -1,0 +1,26 @@
+.nav{
+    margin-top:10px;
+
+
+}
+
+
+li{
+    text-align:center;
+
+
+}
+
+link{
+    color:black;
+
+
+}
+
+ul{
+    margin:0px;
+    padding:0px;
+    list-style:none;
+    display:flex;
+
+}
